@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="control_foreground">#FFFFFF</color>
+    <color name="control_accent">#4945FF</color>
+    <color name="control_background">#33000000</color>
+    <color name="seek_background">#99FFFFFF</color>
+    <color name="seek_buffer">#FFFFFF</color>
+    <color name="sheet_background">#FFFFFF</color>
+    <color name="sheet_foreground">#0F172A</color>
+    <color name="sheet_handle">#F8FAFC</color>
+    <color name="fullscreen_background">#000000</color>
+</resources>

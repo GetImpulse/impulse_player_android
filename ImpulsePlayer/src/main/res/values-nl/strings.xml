@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="controls_back">Terug</string>
+    <string name="controls_backward_10">10 seconden achteruit</string>
+    <string name="controls_cast">Cast</string>
+    <string name="controls_error_title">De video kon niet geladen worden.</string>
+    <string name="controls_error_x">(Foutcode: %d)</string>
+    <string name="controls_forward_10">10 seconden vooruit</string>
+    <string name="controls_fullscreen_enter">Naar volledig scherm</string>
+    <string name="controls_fullscreen_exit">Volledig scherm sluiten</string>
+    <string name="controls_pause">Pauzeren</string>
+    <string name="controls_picture_in_picture">Beeld-in-beeld</string>
+    <string name="controls_play">Afspelen</string>
+    <string name="controls_quality">Kwaliteit</string>
+    <string name="controls_retry">Probeer opnieuw</string>
+    <string name="controls_seek_divider">/</string>
+    <string name="controls_speed">Afspeelsnelheid</string>
+    <string name="quality_automatic">Automatisch</string>
+    <string name="quality_title">Kwaliteit</string>
+    <string name="quality_x_p">%dp</string>
+    <string name="speed_title">Afspeelsnelheid</string>
+    <string name="video_player_playing_picture_in_picture">Deze video wordt in ‘Beeld-in-beeld’ modus afgespeeld.</string>
+</resources>

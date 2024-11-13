@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application>
+        <activity
+            android:name=".sheet.VideoQualitySheet"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Sheet" />
+
+        <activity
+            android:name=".sheet.SpeedSheet"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Sheet" />
+
+        <activity
+            android:name=".component.FullscreenActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Fullscreen" />
+
+        <activity
+            android:name=".component.PictureInPictureActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
+            android:supportsPictureInPicture="true"
+            android:theme="@style/ImpulsePlayer.PictureInPicture" />
+    </application>
+</manifest>

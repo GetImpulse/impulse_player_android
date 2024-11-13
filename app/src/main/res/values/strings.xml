@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">ImpulsePlayer</string>
+    <string name="main_title">Impulse Player</string>
+    <string name="main_description">Press the button below to see the videos.</string>
+    <string name="main_show_videos">Show videos</string>
+</resources>

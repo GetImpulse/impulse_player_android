@@ -1,0 +1,20 @@
+<resources>
+
+    <style name="ImpulsePlayer" parent="Theme.Material3.Dark.NoActionBar">
+
+    </style>
+
+    <style name="ImpulsePlayer.Sheet" parent="ImpulsePlayer">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <style name="ImpulsePlayer.Fullscreen" parent="ImpulsePlayer">
+        <item name="android:windowBackground">@color/fullscreen_background</item>
+    </style>
+
+    <style name="ImpulsePlayer.PictureInPicture" parent="ImpulsePlayer">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+</resources>

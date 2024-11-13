@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="controls_back">Back</string>
+    <string name="controls_backward_10">Backward 10 seconds</string>
+    <string name="controls_cast">Cast</string>
+    <string name="controls_error_title">The video could not be loaded.</string>
+    <string name="controls_error_x">(Error code: %d)</string>
+    <string name="controls_forward_10">Forward 10 seconds</string>
+    <string name="controls_fullscreen_enter">Enter fullscreen</string>
+    <string name="controls_fullscreen_exit">Exit fullscreen</string>
+    <string name="controls_pause">Pause</string>
+    <string name="controls_picture_in_picture">Picture in Picture</string>
+    <string name="controls_play">Play</string>
+    <string name="controls_quality">Quality</string>
+    <string name="controls_retry">Try again</string>
+    <string name="controls_seek_divider">/</string>
+    <string name="controls_speed">Playback speed</string>
+    <string name="quality_automatic">Automatic</string>
+    <string name="quality_title">Quality</string>
+    <string name="quality_x_p">%dp</string>
+    <string name="speed_title">Playback speed</string>
+    <string name="video_player_playing_picture_in_picture">This video is playing in ‘Picture-in-picture’ mode.</string>
+</resources>
