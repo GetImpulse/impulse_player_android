@@ -1,5 +1,7 @@
 # Impulse Player
 
+[![](https://jitpack.io/v/GetImpulse/impulse_player_android.svg)](https://jitpack.io/#GetImpulse/impulse_player_android)
+
 The Impulse Player makes using a video player in Android easy. Under the hood, the Impulse Player uses [Media3 ExoPlayer](https://developer.android.com/media/media3/exoplayer) for video playback.
 
 Additionally the Impulse Player contains features such as Fullscreen handling and Picture-in-Picture mode out of the box.
