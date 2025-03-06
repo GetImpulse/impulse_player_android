@@ -4,25 +4,34 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
+        <meta-data
+            android:name="com.google.android.gms.cast.framework.OPTIONS_PROVIDER_CLASS_NAME"
+            android:value="io.getimpulse.player.feature.cast.CastOptionsProvider" />
+
         <activity
-            android:name=".sheet.VideoQualitySheet"
+            android:name=".feature.cast.CastSheet"
             android:configChanges="screenSize|orientation"
             android:theme="@style/ImpulsePlayer.Sheet" />
 
         <activity
-            android:name=".sheet.SpeedSheet"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/ImpulsePlayer.Sheet" />
-
-        <activity
-            android:name=".component.FullscreenActivity"
-            android:configChanges="screenSize|orientation"
-            android:theme="@style/ImpulsePlayer.Fullscreen" />
-
-        <activity
-            android:name=".component.PictureInPictureActivity"
+            android:name=".feature.pip.PictureInPictureActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:supportsPictureInPicture="true"
             android:theme="@style/ImpulsePlayer.PictureInPicture" />
+
+        <activity
+            android:name=".feature.VideoQualitySheet"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Sheet" />
+
+        <activity
+            android:name=".feature.SpeedSheet"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Sheet" />
+
+        <activity
+            android:name=".feature.fullscreen.FullscreenActivity"
+            android:configChanges="screenSize|orientation"
+            android:theme="@style/ImpulsePlayer.Fullscreen" />
     </application>
 </manifest>

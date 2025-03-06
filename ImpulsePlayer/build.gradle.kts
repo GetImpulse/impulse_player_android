@@ -50,7 +50,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.getimpulse"
             artifactId = "ImpulsePlayer"
-            version = "0.1.0"
+            version = "0.2.0"
 
             afterEvaluate {
                 from(components["release"])
@@ -104,9 +104,9 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer.hls)
     implementation(libs.androidx.media3.ui)
 
-
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.5.1")
+    implementation("com.google.android.gms:play-services-cast-framework:21.4.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

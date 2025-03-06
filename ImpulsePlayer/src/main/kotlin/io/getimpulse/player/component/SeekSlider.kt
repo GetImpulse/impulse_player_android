@@ -7,9 +7,9 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import com.google.android.material.slider.Slider
 import io.getimpulse.player.R
-import io.getimpulse.player.extension.asColor
-import io.getimpulse.player.extension.asInt
-import io.getimpulse.player.extension.dpToPx
+import io.getimpulse.player.util.extension.asColor
+import io.getimpulse.player.util.extension.asInt
+import io.getimpulse.player.util.extension.dpToPx
 
 class SeekSlider @JvmOverloads constructor(
     context: Context,

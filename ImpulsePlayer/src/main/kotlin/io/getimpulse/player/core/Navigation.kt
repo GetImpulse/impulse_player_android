@@ -1,53 +1,57 @@
 package io.getimpulse.player.core
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
-import io.getimpulse.player.Navigator
-import io.getimpulse.player.model.Speed
-import io.getimpulse.player.model.VideoQuality
-import io.getimpulse.player.sheet.Contract
+import io.getimpulse.player.util.ImpulsePlayerNavigator
+import io.getimpulse.player.feature.SpeedSheet
+import io.getimpulse.player.feature.VideoQualitySheet
+import io.getimpulse.player.feature.cast.CastSheet
+import io.getimpulse.player.feature.fullscreen.FullscreenActivity
+import io.getimpulse.player.feature.pip.PictureInPictureActivity
 
 internal object Navigation {
 
-    private val contracts = mutableMapOf<String, Contract<*>>()
-
-    fun <T : Contract<*>> getContract(key: String): T? = contracts[key] as? T
-
-    suspend fun selectVideoQuality(
-        navigator: Navigator,
-        contract: Contract.VideoQualityContract,
-    ): VideoQuality? {
-        start(navigator, contract)
-        return contract.getResult()
-    }
-
-    suspend fun selectSpeed(
-        navigator: Navigator,
-        contract: Contract.SpeedContract,
-    ): Speed? {
-        start(navigator, contract)
-        return contract.getResult()
-    }
-
-    suspend fun openPictureInPicture(
-        navigator: Navigator,
-        contract: Contract.PictureInPictureContract,
+    fun openSelectCast(
+        navigator: ImpulsePlayerNavigator,
+        contract: Contracts.SelectCast,
     ) {
-        start(navigator, contract)
+        start(navigator, CastSheet.createIntent(navigator.getCurrentActivity(), contract))
+    }
+
+    fun openFullscreen(
+        navigator: ImpulsePlayerNavigator,
+        contract: Contracts.Fullscreen,
+    ) {
+        start(navigator, FullscreenActivity.createIntent(navigator.getCurrentActivity(), contract))
+    }
+
+    fun openPictureInPicture(
+        navigator: ImpulsePlayerNavigator,
+        contract: Contracts.PictureInPicture,
+    ) {
+        start(
+            navigator,
+            PictureInPictureActivity.createIntent(navigator.getCurrentActivity(), contract),
+        )
         navigator.getCurrentActivity().overridePendingTransition(0, 0)
-        contract.getResult()
     }
 
-    suspend fun openFullscreen(
-        navigator: Navigator,
-        contract: Contract.FullscreenContract,
+    fun openSelectSpeed(
+        navigator: ImpulsePlayerNavigator,
+        contract: Contracts.SelectSpeed,
     ) {
-        start(navigator, contract)
-        contract.getResult()
+        start(navigator, SpeedSheet.createIntent(navigator.getCurrentActivity(), contract))
     }
 
-    private fun start(navigator: Navigator, contract: Contract<*>) {
-        contracts[contract.key] = contract
-        navigator.getCurrentActivity().startActivity(contract.createIntent())
+    fun openSelectVideoQuality(
+        navigator: ImpulsePlayerNavigator,
+        contract: Contracts.SelectVideoQuality,
+    ) {
+        start(navigator, VideoQualitySheet.createIntent(navigator.getCurrentActivity(), contract))
+    }
+
+    private fun start(navigator: ImpulsePlayerNavigator, intent: Intent) {
+        navigator.getCurrentActivity().startActivity(intent)
     }
 
     fun finish(activity: AppCompatActivity) {

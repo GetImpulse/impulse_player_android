@@ -7,6 +7,7 @@
     <style name="ImpulsePlayer.Sheet" parent="ImpulsePlayer">
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="colorControlHighlight">@color/control_highlight</item>
     </style>
 
     <style name="ImpulsePlayer.Fullscreen" parent="ImpulsePlayer">

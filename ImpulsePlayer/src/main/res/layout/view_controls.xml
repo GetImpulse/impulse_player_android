@@ -69,13 +69,13 @@
             android:divider="@drawable/space_8"
             android:orientation="horizontal">
 
-            <ImageView
+            <io.getimpulse.player.component.controls.CastButton
                 android:id="@+id/cast"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:contentDescription="@string/controls_cast"
                 android:padding="8dp"
-                android:src="@drawable/ic_feature_cast"
+                android:src="@drawable/ic_cast"
                 android:visibility="gone"
                 app:tint="@color/control_foreground"
                 tools:visibility="visible" />
@@ -166,29 +166,6 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <SeekBar
-                android:id="@+id/seek"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="1dp"
-                android:layout_weight="1"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp"
-                android:progressBackgroundTint="@color/seek_background"
-                android:progressDrawable="@drawable/seek_track"
-                android:progressTint="@color/control_accent"
-                android:secondaryProgressTint="@color/control_foreground"
-                android:thumb="@drawable/seek_thumb"
-                android:thumbTint="@color/control_accent"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/time_current"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:progress="25"
-                tools:secondaryProgress="50" />
-
             <io.getimpulse.player.component.SeekSlider
                 android:id="@+id/slider"
                 android:layout_width="0dp"
@@ -261,13 +238,13 @@
             android:showDividers="middle"
             app:layout_constraintBottom_toBottomOf="parent">
 
-            <io.getimpulse.player.component.BarButtonView
+            <io.getimpulse.player.component.controls.QualityButton
                 android:id="@+id/quality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/controls_quality" />
 
-            <io.getimpulse.player.component.BarButtonView
+            <io.getimpulse.player.component.controls.SpeedButton
                 android:id="@+id/speed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

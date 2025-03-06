@@ -1,34 +1,32 @@
 package io.getimpulse.player
 
 import android.content.Context
-import android.content.Intent
-import android.content.pm.ActivityInfo
 import android.graphics.Rect
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.ui.PlayerView
-import io.getimpulse.player.component.CommonView
-import io.getimpulse.player.component.ControlsView
-import io.getimpulse.player.core.Logging
+import io.getimpulse.player.component.controls.ControlsView
+import io.getimpulse.player.component.overlay.CastingOverlay
+import io.getimpulse.player.component.overlay.ErrorOverlay
+import io.getimpulse.player.component.overlay.LoadingOverlay
+import io.getimpulse.player.component.overlay.PictureInPictureOverlay
 import io.getimpulse.player.core.NativeNavigator
-import io.getimpulse.player.core.Navigation
-import io.getimpulse.player.core.Sessions
-import io.getimpulse.player.extension.setFont
-import io.getimpulse.player.extension.setGone
-import io.getimpulse.player.extension.setVisible
+import io.getimpulse.player.core.SessionManager
+import io.getimpulse.player.feature.fullscreen.FullscreenManager
+import io.getimpulse.player.feature.pip.PictureInPictureManager
 import io.getimpulse.player.model.PlayerButton
 import io.getimpulse.player.model.PlayerDelegate
 import io.getimpulse.player.model.Video
 import io.getimpulse.player.model.VideoKey
-import io.getimpulse.player.sheet.Contract
+import io.getimpulse.player.util.ImpulsePlayerNavigator
+import io.getimpulse.player.util.Logging
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,26 +47,40 @@ class ImpulsePlayerView @JvmOverloads constructor(
         this,
         true,
     )
-    private val commonView by lazy { root.findViewById<CommonView>(R.id.common_view) }
-    private val controlView by lazy { playerView.findViewById<ControlsView>(R.id.controls) }
-    private val pictureInPictureLayout by lazy { root.findViewById<View>(R.id.pip_layout) }
-    private val pictureInPictureText by lazy { root.findViewById<TextView>(R.id.pip_text) }
-    private val playerView by lazy {
-        root.findViewById<PlayerView>(R.id.player_view).apply {
-            @OptIn(UnstableApi::class)
-            controllerShowTimeoutMs = ImpulsePlayer.controlsTimeout.inWholeMilliseconds.toInt()
-        }
-    }
-
-    private var job: Job? = null
-    private var navigator: Navigator = NativeNavigator(context)
+    private val errorOverlay by lazy { root.findViewById<ErrorOverlay>(R.id.error_overlay) }
+    private val controlsView by lazy { root.findViewById<ControlsView>(R.id.controls_view) }
+    private val castingOverlay by lazy { root.findViewById<CastingOverlay>(R.id.casting_overlay) }
+    private val pictureInPictureOverlay by lazy { root.findViewById<PictureInPictureOverlay>(R.id.picture_in_picture_overlay) }
+    private val loadingOverlay by lazy { root.findViewById<LoadingOverlay>(R.id.loading_overlay) }
+    private val playerView by lazy { root.findViewById<PlayerView>(R.id.player_view) }
+    private val viewScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var navigator: ImpulsePlayerNavigator = NativeNavigator(context)
+    private val fullscreenListener by lazy { FullScreenListener() }
+    private val pictureInPictureListener by lazy { PictureInPictureListener() }
 
     init {
-        Logging.d("Init")
+        Logging.d("init")
+        SessionManager.create(this, videoKey)
+        controlsView.initialize(videoKey, object : ControlsView.Delegate.Embedded {
+            @OptIn(UnstableApi::class)
+            override fun onEnterPictureInPicture() {
+                enterPictureInPicture()
+            }
+
+            override fun onEnterFullscreen() {
+                fullscreenListener.enter()
+            }
+        })
+        castingOverlay.initialize(videoKey)
+        pictureInPictureOverlay.initialize(videoKey)
+        errorOverlay.initialize(videoKey)
+        loadingOverlay.initialize(videoKey)
     }
 
+    private fun getSession() = SessionManager.require(videoKey)
+
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        super.onVisibilityChanged(changedView, visibility)
+        Logging.d("onVisibilityChanged")
         when (visibility) {
             GONE,
             INVISIBLE -> {
@@ -83,91 +95,68 @@ class ImpulsePlayerView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        job = Job()
-        val viewScope = CoroutineScope(Dispatchers.Main + job!!)
-        Logging.d("onAttachedToWindow $viewScope")
-        registerAppearance(viewScope)
+        Logging.d("onAttachedToWindow")
 
-        val session = Sessions.attach(context, videoKey)
-        commonView.attach(videoKey)
-        controlView.attach(videoKey, object : ControlsView.Delegate.Embedded {
-            @OptIn(UnstableApi::class)
-            override fun onEnterPictureInPicture() {
-                playerView.hideController()
-                val ints = intArrayOf(0, 0)
-                playerView.getLocationOnScreen(ints)
-                val srcRect =
-                    Rect(ints[0], ints[1], ints[0] + playerView.width, ints[1] + playerView.height)
-                val contract = Contract.PictureInPictureContract(context, videoKey, srcRect)
-                viewScope.launch {
-                    playerView.player = null // Cleanup
-                    pictureInPictureLayout.setVisible()
-                    launch {
-                        val current = navigator.getCurrentActivity()
-                        Navigation.openPictureInPicture(navigator, contract)
-                        pictureInPictureLayout.setGone()
-                        session.onShow(playerView) // Attach again
-
-                        val intent = Intent(context, current::class.java)
-                        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                        context.startActivity(intent)
-                    }
-                }
-            }
-
-            override fun onEnterFullscreen() {
-                val contract = Contract.FullscreenContract(context, videoKey)
-                viewScope?.launch {
-                    launch {
-                        delay(300.milliseconds)
-                        playerView.player = null // Cleanup
-                    }
-                    launch {
-                        val currentOrientation = resources.configuration.orientation
-                        Navigation.openFullscreen(navigator, contract)
-                        session.onShow(playerView) // Attach again
-                        navigator.getCurrentActivity().apply {
-                            requestedOrientation = currentOrientation // Reset
-                            requestedOrientation =
-                                ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED // Prevent force
-                        }
-                    }
-                }
-            }
-        })
-    }
-
-    private fun registerAppearance(viewScope: CoroutineScope) {
-        viewScope.launch {
-            ImpulsePlayer.getAppearance().collect {
-                pictureInPictureText.setFont(it.p2)
-            }
+        SessionManager.attach(context, videoKey)
+        SessionManager.connect(videoKey, playerView)
+        controlsView.attach(videoKey)
+        playerView.setOnClickListener {
+            controlsView.show()
+        }
+        pictureInPictureOverlay.setOnClickListener {
+            PictureInPictureManager.exit()
         }
     }
 
     override fun onDetachedFromWindow() {
         Logging.d("onDetachedFromWindow")
-        Sessions.detach(videoKey)
-        commonView.detach(videoKey)
-        controlView.detach(videoKey)
+        SessionManager.disconnect(videoKey, playerView)
+        SessionManager.detach(videoKey)
+        controlsView.detach(videoKey)
 
-        job?.cancel("Detached")
-        job = null
+        viewScope.cancel("Detached")
         super.onDetachedFromWindow()
+    }
+
+    private fun enterPictureInPicture() {
+        pictureInPictureListener.enter()
     }
 
     private fun onShow() {
         Logging.d("onShow")
-        Sessions.show(videoKey, playerView)
+        SessionManager.show(videoKey, context)
     }
 
     private fun onHide() {
         Logging.d("onHide")
-        Sessions.hide(videoKey, playerView)
+        SessionManager.hide(videoKey, context)
     }
 
     private fun load(video: Video) {
-        Sessions.load(context, videoKey, video)
+        SessionManager.load(context, videoKey, video)
+        checkPictureInPicture()
+    }
+
+    private fun checkPictureInPicture() {
+        val pipVideoKey = when (val state = PictureInPictureManager.getState().value) {
+            PictureInPictureManager.State.Inactive -> null
+            is PictureInPictureManager.State.Loading -> state.key
+            is PictureInPictureManager.State.Active -> state.key
+        }
+        if (pipVideoKey == null) {
+            controlsView.hide()
+        } else {
+            val pipSession = SessionManager.require(pipVideoKey)
+            val thisSession = getSession()
+            Logging.d("Check pip: ${pipSession.getVideo().value} || ${thisSession.getVideo().value} == ${pipSession.getVideo().value == thisSession.getVideo().value}")
+            if (pipSession.getVideo().value == thisSession.getVideo().value) {
+                // It's the same, so sync thumbnail and show that we are in PIP
+                SessionManager.sync(fromSession = pipSession, toSession = thisSession)
+                PictureInPictureManager.register(pictureInPictureListener)
+            } else {
+                // Different video, so we are not in PIP and don't need to handle this
+            }
+        }
     }
 
     // External interface
@@ -181,50 +170,125 @@ class ImpulsePlayerView @JvmOverloads constructor(
     }
 
     fun play() {
-        Sessions.getV(this, videoKey).onPlay()
+        getSession().onPlay()
     }
 
     fun pause() {
-        Sessions.getV(this, videoKey).onPause()
+        getSession().onPause()
     }
 
     fun seek(time: Long) {
-        Sessions.getV(this, videoKey).onSeek(time)
+        getSession().onSeek(time)
     }
 
-    fun getState() = Sessions.getV(this, videoKey).getState()
-    fun isPlaying() = Sessions.getV(this, videoKey).isPlaying()
-    fun getProgress() = Sessions.getV(this, videoKey).getProgress()
-    fun getDuration() = Sessions.getV(this, videoKey).getDuration()
-    fun getError() = Sessions.getV(this, videoKey).getError()
+    fun getState() = getSession().getState()
+    fun isPlaying() = getSession().isPlaying()
+    fun getProgress() = getSession().getProgress()
+    fun getDuration() = getSession().getDuration()
+    fun getError() = getSession().getError()
 
     fun setDelegate(delegate: PlayerDelegate) {
-        Sessions.getV(this, videoKey).addDelegate(delegate)
+        getSession().addDelegate(delegate)
     }
 
     fun setButton(key: String, button: PlayerButton) {
-        Sessions.getV(this, videoKey).setButton(key, button)
+        getSession().setButton(key, button)
     }
 
     fun removeDelegate(delegate: PlayerDelegate) {
-        Sessions.getV(this, videoKey).removeDelegate(delegate)
+        getSession().removeDelegate(delegate)
     }
 
     fun removeButton(key: String) {
-        Sessions.getV(this, videoKey).removeButton(key)
+        getSession().removeButton(key)
     }
 
     // External interop
-    internal fun setNavigator(navigator: Navigator?) {
+    internal fun setNavigator(navigator: ImpulsePlayerNavigator?) {
         this.navigator = navigator ?: NativeNavigator(context)
-        controlView.setNavigator(if (navigator is NativeNavigator) null else navigator)
+        controlsView.setNavigator(if (navigator is NativeNavigator) null else navigator)
     }
 
     internal fun externalAttach() {
-        Sessions.attach(context, videoKey)
+        SessionManager.attach(context, videoKey)
     }
 
     internal fun externalDetach() {
-        Sessions.detach(videoKey)
+        SessionManager.detach(videoKey)
+    }
+
+    // Inner classes
+    internal inner class FullScreenListener : FullscreenManager.Listener {
+        fun enter() {
+            Logging.d("Fullscreen: - enter")
+            SessionManager.disconnect(videoKey, playerView)
+
+            FullscreenManager.enter(videoKey, navigator, this)
+        }
+
+        override fun onActivated() {
+            Logging.d("Fullscreen: - onActivated")
+        }
+
+        override fun onExited(toPictureInPicture: Boolean) {
+            Logging.d("Fullscreen: - onExited $toPictureInPicture")
+            SessionManager.connect(videoKey, playerView)
+            if (toPictureInPicture) {
+                viewScope.launch {
+                    delay(750.milliseconds)
+                    enterPictureInPicture()
+                }
+            }
+        }
+    }
+
+    internal inner class PictureInPictureListener : PictureInPictureManager.Listener {
+        fun enter() {
+            Logging.d("PictureInPicture: - enter")
+            controlsView.hide()
+            val ints = intArrayOf(0, 0)
+            playerView.getLocationOnScreen(ints)
+            val srcRect =
+                Rect(ints[0], ints[1], ints[0] + playerView.width, ints[1] + playerView.height)
+
+            SessionManager.disconnect(videoKey, playerView)
+
+            PictureInPictureManager.enter(
+                videoKey,
+                navigator,
+                srcRect,
+                this
+            )
+        }
+
+        override fun onActivated() {
+            Logging.d("PictureInPicture: - onActivated")
+        }
+
+        override fun onExited(exitedVideoKey: VideoKey) {
+            Logging.d("PictureInPicture: - onExited")
+            if (exitedVideoKey == videoKey) {
+                Logging.d("PictureInPicture: - Connect")
+                SessionManager.connect(videoKey, playerView)
+            } else {
+                Logging.d("PictureInPicture: - Same video, other key")
+                // Means that we used the same video as PIP was showing.
+                val oldSession = SessionManager.require(exitedVideoKey)
+                val thisSession = getSession()
+                if (oldSession.getVideo().value == thisSession.getVideo().value) {
+                    Logging.d("PictureInPicture: - Sync state")
+                    // Video is still the same, sync state
+                    SessionManager.sync(fromSession = oldSession, toSession = thisSession)
+
+                    // Start playing if we were paused
+                    if (oldSession.isPlaying().value && thisSession.isPlaying().value.not()) {
+                        Logging.d("PictureInPicture: - Continue playing")
+                        thisSession.onPlay()
+                    }
+                } else {
+                    Logging.d("PictureInPicture: - Video changed: ${oldSession.getVideo().value} != ${thisSession.getVideo().value}")
+                }
+            }
+        }
     }
 }

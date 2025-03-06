@@ -19,5 +19,7 @@
     <string name="quality_title">Quality</string>
     <string name="quality_x_p">%dp</string>
     <string name="speed_title">Playback speed</string>
+    <string name="video_player_playing_cast">This video is playing in ‘Casting’ mode.</string>
     <string name="video_player_playing_picture_in_picture">This video is playing in ‘Picture-in-picture’ mode.</string>
+    <string name="cast_title">Select device</string>
 </resources>

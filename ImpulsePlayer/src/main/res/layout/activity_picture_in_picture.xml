@@ -9,10 +9,15 @@
         android:id="@+id/player_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:controller_layout_id="@layout/embed_controls" />
+        app:use_controller="false" />
 
-    <io.getimpulse.player.component.CommonView
-        android:id="@+id/common_view"
+    <io.getimpulse.player.component.overlay.ErrorOverlay
+        android:id="@+id/error_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <io.getimpulse.player.component.overlay.LoadingOverlay
+        android:id="@+id/loading_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

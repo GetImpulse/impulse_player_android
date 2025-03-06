@@ -2,6 +2,8 @@
 <resources>
     <color name="control_foreground">#FFFFFF</color>
     <color name="control_accent">#4945FF</color>
+    <color name="control_highlight">#F8FAFC</color>
+    <color name="overlay_background">#99000000</color>
     <color name="control_background">#33000000</color>
     <color name="seek_background">#99FFFFFF</color>
     <color name="seek_buffer">#FFFFFF</color>
