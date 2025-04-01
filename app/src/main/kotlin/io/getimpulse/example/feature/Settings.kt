@@ -1,4 +1,4 @@
-package io.getimpulse.example
+package io.getimpulse.example.feature
 
 import io.getimpulse.example.model.Video
 
@@ -6,16 +6,19 @@ object Settings {
 
     val Videos = listOf(
         Video(
-            "Sintel",
+            "Big Buck Bunny",
+            "Blender Foundation",
             "https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8",
         ),
         Video(
-            "Big Buck Bunny 480p",
-            "https://test-streams.mux.dev/x36xhzz/url_6/193039199_mp4_h264_aac_hq_7.m3u8",
+            "Sintel",
+            "Blender Foundation",
+            "https://origin.broadpeak.io/bpk-vod/voddemo/hlsv4/5min/sintel/index.m3u8"
         ),
         Video(
-            "Big Buck Bunny MP4",
-            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+            "Tears of Steel",
+            "Blender Foundation",
+            "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8",
         ),
     )
 }

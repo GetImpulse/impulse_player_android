@@ -1,8 +1,6 @@
 package io.getimpulse.player.model
 
-import io.getimpulse.player.ImpulsePlayer
-
-class ImpulsePlayerSettings private constructor(
+class ImpulsePlayerSettings(
     internal val pictureInPictureEnabled: Boolean,
     internal val castReceiverApplicationId: String?,
 ) {
@@ -14,27 +12,5 @@ class ImpulsePlayerSettings private constructor(
         )
     }
 
-    class Builder {
-        private var pictureInPicture: Boolean = false
-        private var castReceiverApplicationId: String? = null
-
-        fun withPictureInPicture(): Builder {
-            pictureInPicture = true
-            return this
-        }
-
-        fun withCast(receiverApplicationId: String): Builder {
-            castReceiverApplicationId = receiverApplicationId
-            return this
-        }
-
-        fun apply() {
-            ImpulsePlayer.setSettings(
-                ImpulsePlayerSettings(
-                    pictureInPicture,
-                    castReceiverApplicationId,
-                )
-            )
-        }
-    }
+    fun isCastEnabled() = castReceiverApplicationId != null
 }

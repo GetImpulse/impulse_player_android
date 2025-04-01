@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="8dp"
-    android:paddingStart="16dp"
     android:paddingTop="8dp"
-    android:paddingEnd="16dp"
     android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:background="@drawable/shape_corner_16"
+        android:backgroundTint="@color/control_accent"
+        android:padding="8dp"
+        android:src="@drawable/ic_cast_tv"
+        app:tint="@color/control_accent"
+        tools:backgroundTint="#4D4945FF" />
 
     <TextView
         android:id="@+id/title"

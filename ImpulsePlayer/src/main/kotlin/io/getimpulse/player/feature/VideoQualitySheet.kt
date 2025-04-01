@@ -41,7 +41,7 @@ internal class VideoQualitySheet : SheetActivity(R.layout.sheet_quality), SheetA
     private val options by lazy {
         requireNotNull(sheet).requireView().findViewById<RecyclerView>(R.id.options)
     }
-    private val adapter by lazy { SheetAdapter(this) }
+    private val adapter by lazy { SheetAdapter(this, showSelected = true) }
 
     private fun getSession() = contract?.let { SessionManager.require(it.videoKey) }
     private fun requireSession() = requireNotNull(getSession())
@@ -76,6 +76,7 @@ internal class VideoQualitySheet : SheetActivity(R.layout.sheet_quality), SheetA
             contract.options.map {
                 SheetAdapter.Row(
                     it.hashCode(),
+                    null,
                     when (it) {
                         VideoQuality.Automatic -> {
                             getString(R.string.quality_automatic)

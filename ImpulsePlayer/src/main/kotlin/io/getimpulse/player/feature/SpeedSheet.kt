@@ -42,7 +42,7 @@ internal class SpeedSheet : SheetActivity(R.layout.sheet_speed), SheetAdapter.Li
     private val options by lazy {
         requireNotNull(sheet).requireView().findViewById<RecyclerView>(R.id.options)
     }
-    private val adapter by lazy { SheetAdapter(this) }
+    private val adapter by lazy { SheetAdapter(this, showSelected = true) }
 
     private fun getSession() = contract?.let { SessionManager.require(it.videoKey) }
     private fun requireSession() = requireNotNull(getSession())
@@ -77,6 +77,7 @@ internal class SpeedSheet : SheetActivity(R.layout.sheet_speed), SheetAdapter.Li
             contract.options.map {
                 SheetAdapter.Row(
                     it.key,
+                    null,
                     Formatter.speed(it),
                     it == selected,
                 )

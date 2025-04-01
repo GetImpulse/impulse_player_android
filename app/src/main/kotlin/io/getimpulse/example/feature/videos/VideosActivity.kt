@@ -4,36 +4,32 @@ import android.graphics.Typeface
 import android.graphics.fonts.FontVariationAxis
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
-import androidx.lifecycle.lifecycleScope
+import io.getimpulse.example.feature.Settings
 import io.getimpulse.player.ImpulsePlayer
 import io.getimpulse.player.ImpulsePlayerView
 import io.getimpulse.player.model.ImpulsePlayerAppearance
 import io.getimpulse.player.model.ImpulsePlayerFont
-import io.getimpulse.player.model.ImpulsePlayerSettings
 import io.getimpulse.player.model.PlayerButton
 import io.getimpulse.player.model.PlayerDelegate
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 class VideosActivity : BaseActivity(R.layout.activity_videos) {
 
     private val impulsePlayer by lazy { findViewById<ImpulsePlayerView>(R.id.video_player_one) }
     private val videoPlayerTwo by lazy { findViewById<ImpulsePlayerView>(R.id.video_player_two) }
     private val videoPlayerThree by lazy { findViewById<ImpulsePlayerView>(R.id.video_player_three) }
+    private val videoPlayerFour by lazy { findViewById<ImpulsePlayerView>(R.id.video_player_four) }
 
     override fun setupView() {
         val videoOne = Settings.Videos[0]
         impulsePlayer.load(
             videoOne.title,
-            "Video 1 subtitle",
-            "https://bitmovin-a.akamaihd.net/content/sintel/hls/playlist.m3u8",
+            videoOne.subtitle,
+            videoOne.url,
         )
         val videoTwo = Settings.Videos[1]
         videoPlayerTwo.load(
             videoTwo.title,
-            "Video 2 subtitle",
+            videoTwo.subtitle,
             videoTwo.url,
         )
 //        lifecycleScope.launch {
@@ -42,15 +38,18 @@ class VideosActivity : BaseActivity(R.layout.activity_videos) {
 //            val videoThree = Settings.Videos[2]
 //            videoPlayerTwo.load(
 //                videoThree.title,
-//                "Video 3 subtitle",
+//                videoThree.subtitle,
 //                videoThree.url,
 //            )
 //        }
         val videoThree = Settings.Videos[2]
         videoPlayerThree.load(
             videoThree.title,
-            "Video 3 subtitle",
-            "??" + videoThree.url + "??",
+            videoThree.subtitle,
+            videoThree.url,
+        )
+        videoPlayerFour.load(
+            ""
         )
 //        commands()
 //        getters()

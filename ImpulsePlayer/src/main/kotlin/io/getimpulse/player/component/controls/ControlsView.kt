@@ -97,6 +97,7 @@ internal class ControlsView @JvmOverloads constructor(
     private val requestShow = MutableStateFlow(false)
 
     init {
+        Logging.d("init")
         setGone()
     }
 
@@ -225,12 +226,14 @@ internal class ControlsView @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
+        Logging.d("onDetachedFromWindow")
         viewScope.cancel("Detached")
         super.onDetachedFromWindow()
     }
 
     @OptIn(UnstableApi::class)
     fun attach(key: VideoKey) {
+        Logging.d("attach ${videoKey.identifier}")
         SessionManager.attach(context, key)
         CastManager.attach(context)
 
@@ -337,41 +340,45 @@ internal class ControlsView @JvmOverloads constructor(
         }
         viewScope.launch {
             getSession().getVideo().collect { video ->
-                setTitle(video?.title)
-                setDescription(video?.description)
+                renderTitle(video?.title)
+                renderDescription(video?.description)
             }
         }
         viewScope.launch {
             getSession().getPlayerBuffer().collect { progress ->
-                updateBuffer(progress)
+                renderBuffer(progress)
             }
         }
         viewScope.launch {
             getSession().getProgress().collect { progress ->
 //                Logging.d("Progress: $progress")
-                updateProgress(progress)
+                renderProgress(progress)
             }
         }
         viewScope.launch {
             getSession().getDuration().collect { duration ->
-                Logging.d("Duration: $duration")
-                slider.valueTo = if (duration > 0) {
-                    duration.toFloat()
-                } else {
-                    1f
-                }
-                timeDuration.text = Formatter.time(duration.milliseconds)
+//                Logging.d("Duration: $duration")
+                renderDuration(duration)
             }
         }
     }
 
-    private fun updateBuffer(progress: Long) {
+    private fun renderBuffer(progress: Long) {
         slider.setBuffer(progress.toFloat())
     }
 
-    private fun updateProgress(progress: Long) {
+    private fun renderProgress(progress: Long) {
         slider.value = progress.toFloat()
         timeCurrent.text = Formatter.time(progress.milliseconds)
+    }
+
+    private fun renderDuration(duration: Long) {
+        slider.valueTo = if (duration > 0) {
+            duration.toFloat()
+        } else {
+            1f
+        }
+        timeDuration.text = Formatter.time(duration.milliseconds)
     }
 
     private fun registerListeners() {
@@ -456,7 +463,7 @@ internal class ControlsView @JvmOverloads constructor(
         SessionManager.detach(key)
     }
 
-    private fun setTitle(text: String?) {
+    private fun renderTitle(text: String?) {
         title.text = text
         title.setVisible(
             when (delegate) {
@@ -467,7 +474,7 @@ internal class ControlsView @JvmOverloads constructor(
         )
     }
 
-    private fun setDescription(text: String?) {
+    private fun renderDescription(text: String?) {
         description.text = text
         description.setVisible(
             when (delegate) {

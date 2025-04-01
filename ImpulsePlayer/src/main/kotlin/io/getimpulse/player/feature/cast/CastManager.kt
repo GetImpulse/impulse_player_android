@@ -2,10 +2,12 @@ package io.getimpulse.player.feature.cast
 
 import android.annotation.SuppressLint
 import android.content.Context
+import io.getimpulse.player.ImpulsePlayer
 import io.getimpulse.player.util.ImpulsePlayerNavigator
 import io.getimpulse.player.core.Contracts
 import io.getimpulse.player.util.Logging
 import io.getimpulse.player.core.Navigation
+import io.getimpulse.player.model.ImpulsePlayerSettings
 import io.getimpulse.player.model.Video
 import io.getimpulse.player.model.VideoKey
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -40,7 +42,10 @@ internal object CastManager {
     fun getPlaybackDuration() = playbackDuration.asStateFlow()
     fun getVideo() = video.asStateFlow()
 
+    private fun isEnabled() = ImpulsePlayer.getSettings().value.isCastEnabled()
+
     fun attach(context: Context) {
+        if (isEnabled().not()) return
         clients += 1
         Logging.d("Attach $clients")
         if (castInteractor == null) {
@@ -82,6 +87,7 @@ internal object CastManager {
     }
 
     fun detach() {
+        if (isEnabled().not()) return
         clients -= 1
         Logging.d("Detach $clients")
         if (clients == 0) {
@@ -123,6 +129,11 @@ internal object CastManager {
     private fun openSelect(navigator: ImpulsePlayerNavigator, videoKey: VideoKey) {
         val contract = Contracts.SelectCast(videoKey)
         Navigation.openSelectCast(navigator, contract)
+    }
+
+    fun isDefault(routeId: String): Boolean {
+        val castRouter = castRouter ?: throw IllegalStateException("Not attached")
+        return castRouter.isDefault(routeId)
     }
 
     fun isSelected(routeId: String): Boolean {

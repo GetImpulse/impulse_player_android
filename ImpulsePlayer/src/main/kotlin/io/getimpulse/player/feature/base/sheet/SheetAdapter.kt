@@ -1,10 +1,12 @@
 package io.getimpulse.player.feature.base.sheet
 
 import android.view.ViewGroup
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.RecyclerView
 
 internal class SheetAdapter(
     private val listener: Listener,
+    private val showSelected: Boolean,
 ) : RecyclerView.Adapter<SheetRow>() {
 
     interface Listener {
@@ -13,6 +15,7 @@ internal class SheetAdapter(
 
     data class Row(
         val key: Int,
+        @DrawableRes val icon: Int?,
         val title: String,
         val selected: Boolean,
     )
@@ -20,7 +23,7 @@ internal class SheetAdapter(
     private val items = mutableListOf<Row>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SheetRow {
-        return SheetRow(parent)
+        return SheetRow(parent, showSelected)
     }
 
     override fun getItemCount() = items.size

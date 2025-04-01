@@ -41,6 +41,15 @@
                 android:id="@+id/video_player_three"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <io.getimpulse.player.ImpulsePlayerView
+                android:id="@+id/video_player_four"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

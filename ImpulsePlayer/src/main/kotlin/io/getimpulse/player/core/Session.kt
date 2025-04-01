@@ -585,9 +585,11 @@ internal class Session(
                     }
 
                     Player.STATE_ENDED -> {
-                        playerPlaying.value = player.isPlaying
-                        playerState.value = PlayerState.Ready
-                        delegates.forEach { it.onFinish() }
+                        if (playerState.value != PlayerState.Loading) {
+                            playerPlaying.value = player.isPlaying
+                            playerState.value = PlayerState.Ready
+                            delegates.forEach { it.onFinish() }
+                        }
                     }
                 }
             }

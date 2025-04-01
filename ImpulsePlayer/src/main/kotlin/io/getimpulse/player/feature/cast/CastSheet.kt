@@ -3,6 +3,7 @@ package io.getimpulse.player.feature.cast
 import android.content.Context
 import android.content.Intent
 import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.RecyclerView
 import io.getimpulse.player.ImpulsePlayer
@@ -44,7 +45,7 @@ internal class CastSheet : SheetActivity(R.layout.sheet_cast), SheetAdapter.List
     private val loader by lazy {
         requireNotNull(sheet).requireView().findViewById<RecyclerView>(R.id.loader)
     }
-    private val adapter by lazy { SheetAdapter(this) }
+    private val adapter by lazy { SheetAdapter(this, showSelected = false) }
 
     private fun getSession() = contract?.let { SessionManager.require(it.videoKey) }
     private fun requireSession() = requireNotNull(getSession())
@@ -85,10 +86,33 @@ internal class CastSheet : SheetActivity(R.layout.sheet_cast), SheetAdapter.List
             devices.map {
                 SheetAdapter.Row(
                     it.id.hashCode(),
-                    it.name,
+                    getIcon(it),
+                    getName(it),
                     CastManager.isSelected(it.id),
                 )
             })
+    }
+
+    @DrawableRes
+    private fun getIcon(route: CastDisplay.Route): Int {
+        return if (CastManager.isDefault(route.id)) {
+            R.drawable.ic_cast_phone
+        } else {
+            when (route.model) {
+                "Chromecast" -> R.drawable.ic_cast_chromecast_1
+                "Chromecast Ultra" -> R.drawable.ic_cast_chromecast_2
+                "Google TV Streamer" -> R.drawable.ic_cast_tv
+                else -> R.drawable.ic_cast_tv
+            }
+        }
+    }
+
+    private fun getName(route: CastDisplay.Route): String {
+        return if (CastManager.isDefault(route.id)) {
+            getString(R.string.cast_this_device)
+        } else {
+            route.name
+        }
     }
 
     override fun handleClose() {

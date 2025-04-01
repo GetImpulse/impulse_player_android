@@ -1,6 +1,7 @@
-package io.getimpulse.example
+package io.getimpulse.example.feature
 
 import android.app.Application
+import io.getimpulse.player.ImpulsePlayer
 import io.getimpulse.player.model.ImpulsePlayerSettings
 
 class ExampleApplication : Application() {
@@ -11,9 +12,11 @@ class ExampleApplication : Application() {
     }
 
     private fun settings() {
-        ImpulsePlayerSettings.Builder()
-            .withPictureInPicture() // Default disabled
-            .withCast("01128E51") // Default disabled
-            .apply()
+        ImpulsePlayer.setSettings(
+            ImpulsePlayerSettings(
+                pictureInPictureEnabled = true, // Whether Picture-in-Picture is enabled; Default `false` (disabled)
+                castReceiverApplicationId = "01128E51", // Cast receiver application id of the cast app; Default `null` (disabled)
+            )
+        )
     }
 }

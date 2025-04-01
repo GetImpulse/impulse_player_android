@@ -57,9 +57,9 @@ class ImpulsePlayerView @JvmOverloads constructor(
     private var navigator: ImpulsePlayerNavigator = NativeNavigator(context)
     private val fullscreenListener by lazy { FullScreenListener() }
     private val pictureInPictureListener by lazy { PictureInPictureListener() }
+    private var previousVisible: Boolean? = null
 
     init {
-        Logging.d("init")
         SessionManager.create(this, videoKey)
         controlsView.initialize(videoKey, object : ControlsView.Delegate.Embedded {
             @OptIn(UnstableApi::class)
@@ -80,23 +80,28 @@ class ImpulsePlayerView @JvmOverloads constructor(
     private fun getSession() = SessionManager.require(videoKey)
 
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
-        Logging.d("onVisibilityChanged")
-        when (visibility) {
-            GONE,
-            INVISIBLE -> {
+        val visible = visibility == View.VISIBLE
+//        Logging.d("onVisibilityChanged $visible")
+        if (previousVisible == null || previousVisible != visible) {
+            if (visible) {
+//                Logging.d("onVisibilityChanged show")
+                onShow()
+            } else {
+//                Logging.d("onVisibilityChanged hide")
                 onHide()
             }
-
-            VISIBLE -> {
-                onShow()
-            }
         }
+        previousVisible = visible
     }
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         Logging.d("onAttachedToWindow")
+        attach()
+    }
 
+    private fun attach() {
+        Logging.d("attach")
         SessionManager.attach(context, videoKey)
         SessionManager.connect(videoKey, playerView)
         controlsView.attach(videoKey)
@@ -110,12 +115,17 @@ class ImpulsePlayerView @JvmOverloads constructor(
 
     override fun onDetachedFromWindow() {
         Logging.d("onDetachedFromWindow")
+        super.onDetachedFromWindow()
+        detach()
+    }
+
+    private fun detach() {
+        Logging.d("detach")
         SessionManager.disconnect(videoKey, playerView)
         SessionManager.detach(videoKey)
         controlsView.detach(videoKey)
 
         viewScope.cancel("Detached")
-        super.onDetachedFromWindow()
     }
 
     private fun enterPictureInPicture() {
@@ -210,11 +220,15 @@ class ImpulsePlayerView @JvmOverloads constructor(
     }
 
     internal fun externalAttach() {
-        SessionManager.attach(context, videoKey)
+        Logging.d("externalAttach")
+        attach()
+//        SessionManager.attach(context, videoKey)
     }
 
     internal fun externalDetach() {
-        SessionManager.detach(videoKey)
+        Logging.d("externalDetach")
+        detach()
+//        SessionManager.detach(videoKey)
     }
 
     // Inner classes

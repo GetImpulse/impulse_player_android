@@ -13,6 +13,7 @@ Features:
 - Playback speed selection.
 - Fullscreen handling.
 - Picture-in-Picture handling.
+- Support for casting.
 
 ## Installing
 
@@ -30,7 +31,7 @@ allprojects {
 In `app/build.gradle`:
 
 ```kotlin
-implementation("com.github.GetImpulse:ImpulsePlayer:0.1.0")
+implementation("com.github.GetImpulse:ImpulsePlayer:0.2.1")
 ```
 
 ## Usage
@@ -134,7 +135,8 @@ Features can be enabled or disabled based on the settings. The defaults can be c
 ```kotlin
 ImpulsePlayer.setSettings(
     ImpulsePlayerSettings(
-        pictureInPictureEnabled = true, // Default `false`
+        pictureInPictureEnabled = true, // Whether Picture-in-Picture is enabled; Default `false` (disabled)
+        castReceiverApplicationId = "01128E51", // Cast receiver application id of the cast app; Default `null` (disabled)
     )
 )
 ```

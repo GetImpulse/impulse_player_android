@@ -37,11 +37,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
 }
 
@@ -49,19 +49,19 @@ publishing {
     publications {
         create<MavenPublication>("release") {
             groupId = "com.github.getimpulse"
-            artifactId = "ImpulsePlayer"
-            version = "0.2.0"
+            artifactId = "impulse_player_android"
+            version = "0.2.1"
 
             afterEvaluate {
                 from(components["release"])
             }
 
             // Additional metadata for the POM
-//            pom {
-//                name.set("My Android Library")
-//                description.set("A description of my library")
-//                url.set("https://github.com/username/mylibrary")
-//
+            pom {
+                name.set("Impulse Player")
+                description.set("The Impulse Player makes using a video player in Android easy.")
+                url.set("https://github.com/getimpulse/impulse_player_android")
+
 //                licenses {
 //                    license {
 //                        name.set("The Apache License, Version 2.0")
@@ -82,7 +82,7 @@ publishing {
 //                    developerConnection.set("scm:git:ssh://github.com:username/mylibrary.git")
 //                    url.set("https://github.com/username/mylibrary")
 //                }
-//            }
+            }
         }
     }
 

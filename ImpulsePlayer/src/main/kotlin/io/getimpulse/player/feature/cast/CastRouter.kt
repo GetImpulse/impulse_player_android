@@ -5,6 +5,7 @@ import androidx.mediarouter.media.MediaControlIntent
 import androidx.mediarouter.media.MediaRouteSelector
 import androidx.mediarouter.media.MediaRouter
 import androidx.mediarouter.media.MediaRouter.RouteInfo
+import com.google.android.gms.cast.CastDevice
 import io.getimpulse.player.util.Logging
 
 internal class CastRouter(
@@ -95,7 +96,8 @@ internal class CastRouter(
                 }
             }
             .map {
-                CastDisplay.Route(it.id, it.name)
+                val castDevice = CastDevice.getFromBundle(it.extras)
+                CastDisplay.Route(it.id, castDevice?.modelName, it.name)
             }
         listener.onRoutesChanged(routes)
     }

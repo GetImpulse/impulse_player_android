@@ -22,4 +22,5 @@
     <string name="video_player_playing_cast">Deze video wordt in ‘Casting’ modus afgespeeld.</string>
     <string name="video_player_playing_picture_in_picture">Deze video wordt in ‘Beeld-in-beeld’ modus afgespeeld.</string>
     <string name="cast_title">Apparaat selecteren</string>
+    <string name="cast_this_device">Dit apparaat</string>
 </resources>
