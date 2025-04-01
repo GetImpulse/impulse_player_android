@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation(project(":ImpulsePlayer")) // Local
-//    implementation("com.github.getimpulse:impulse_player_android:0.2.1") // Remote
+//    implementation("com.github.GetImpulse:impulse_player_android:0.2.1") // Remote
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

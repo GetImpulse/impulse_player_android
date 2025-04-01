@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         mavenCentral()
 
         mavenLocal() // Local publish testing
+        maven { url = uri("https://jitpack.io") } // Local remote testing
     }
 }
 
