@@ -141,6 +141,8 @@ ImpulsePlayer.setSettings(
 )
 ```
 
+> **Note**: Note: Cast is unsupported when a player loads a video using additional authorization headers. To disable Cast for that specific player while preserving Cast functionality for others, use `impulsePlayer.setCastEnabled(false)`
+
 ### Customization
 
 Apply a custom appearance to customize the look of the player.
