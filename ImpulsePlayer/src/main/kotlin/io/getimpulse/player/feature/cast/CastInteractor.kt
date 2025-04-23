@@ -237,7 +237,7 @@ internal class CastInteractor(
                     currentVideo = null
                     listener.onMediaLoaded(null, playing)
                 } else {
-                    val video = Video(title, subtitle, url)
+                    val video = Video(title, subtitle, url, mapOf()) // Cast doesn't support headers
                     currentVideo = video
                     listener.onMediaLoaded(video, playing)
                 }

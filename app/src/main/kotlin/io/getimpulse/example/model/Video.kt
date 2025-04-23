@@ -4,4 +4,5 @@ data class Video(
     val title: String,
     val subtitle: String,
     val url: String,
+    val headers: Map<String, String>,
 )

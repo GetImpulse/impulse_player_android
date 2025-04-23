@@ -3,6 +3,7 @@ package io.getimpulse.player.component.controls
 import android.content.Context
 import android.content.pm.PackageManager
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.FrameLayout
@@ -95,6 +96,7 @@ internal class ControlsView @JvmOverloads constructor(
     private var navigator: ImpulsePlayerNavigator = NativeNavigator(context)
     private var jobVisibility: Job? = null
     private val requestShow = MutableStateFlow(false)
+    private val castEnabled = MutableStateFlow(true)
 
     init {
         Logging.d("init")
@@ -120,6 +122,10 @@ internal class ControlsView @JvmOverloads constructor(
 
     fun setNavigator(navigator: ImpulsePlayerNavigator?) {
         this.navigator = navigator ?: NativeNavigator(context)
+    }
+
+    fun setCastEnabled(enabled: Boolean) {
+        castEnabled.value = enabled
     }
 
     fun show() {
@@ -176,7 +182,8 @@ internal class ControlsView @JvmOverloads constructor(
             combine(
                 ImpulsePlayer.getSettings(),
                 getSession().getCastState(),
-            ) { settings, castState ->
+                castEnabled,
+            ) { settings, castState, castEnabled ->
                 val castVisibleBySettings = settings.castReceiverApplicationId.isNullOrBlank().not()
                 val castVisibleByDelegate = when (delegate) {
                     is Delegate.Embedded,
@@ -190,7 +197,8 @@ internal class ControlsView @JvmOverloads constructor(
                     CastManager.State.Inactive,
                     CastManager.State.Active -> true
                 }
-                cast.setVisible(castVisibleBySettings && castVisibleByDelegate && castVisibleByCast)
+                val castVisibleByView = castEnabled
+                cast.setVisible(castVisibleBySettings && castVisibleByDelegate && castVisibleByCast && castVisibleByView)
             }.collect()
         }
         viewScope.launch {

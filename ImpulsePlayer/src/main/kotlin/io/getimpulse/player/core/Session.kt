@@ -4,9 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaItem.RequestMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
+import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.exoplayer.source.ProgressiveMediaSource
 import androidx.media3.ui.PlayerView
 import io.getimpulse.player.R
 import io.getimpulse.player.feature.cast.CastManager
@@ -140,7 +145,8 @@ internal class Session(
             player = ExoPlayer.Builder(context)
                 .setSeekBackIncrementMs(SeekInterval.inWholeMilliseconds)
                 .setSeekForwardIncrementMs(SeekInterval.inWholeMilliseconds)
-                .build().apply {
+                .build()
+                .apply {
                     registerListeners(this)
                 }
         }
@@ -153,7 +159,11 @@ internal class Session(
         } else {
             val uri = video.url.toUri()
             val mediaItem = MediaItem.fromUri(uri)
-            getPlayer().setMediaItem(mediaItem)
+            val dataSourceFactory = DefaultHttpDataSource.Factory()
+                .setDefaultRequestProperties(video.headers)
+            val source = DefaultMediaSourceFactory(dataSourceFactory)
+                .createMediaSource(mediaItem)
+            getPlayer().setMediaSource(source)
         }
         getPlayer().prepare()
     }

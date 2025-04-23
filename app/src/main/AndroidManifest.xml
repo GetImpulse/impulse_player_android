@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".feature.main.MainActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:supportsPictureInPicture="true">
@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VideosActivity"
+            android:name=".feature.videos.VideosActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:supportsPictureInPicture="true" />
     </application>

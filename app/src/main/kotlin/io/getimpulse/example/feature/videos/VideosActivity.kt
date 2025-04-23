@@ -1,9 +1,11 @@
-package io.getimpulse.example
+package io.getimpulse.example.feature.videos
 
 import android.graphics.Typeface
 import android.graphics.fonts.FontVariationAxis
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
+import io.getimpulse.example.feature.base.BaseActivity
+import io.getimpulse.example.R
 import io.getimpulse.example.feature.Settings
 import io.getimpulse.player.ImpulsePlayer
 import io.getimpulse.player.ImpulsePlayerView
@@ -22,31 +24,36 @@ class VideosActivity : BaseActivity(R.layout.activity_videos) {
     override fun setupView() {
         val videoOne = Settings.Videos[0]
         impulsePlayer.load(
+            videoOne.url,
             videoOne.title,
             videoOne.subtitle,
-            videoOne.url,
+            videoOne.headers,
         )
+        impulsePlayer.setCastEnabled(false)
         val videoTwo = Settings.Videos[1]
         videoPlayerTwo.load(
+            videoTwo.url,
             videoTwo.title,
             videoTwo.subtitle,
-            videoTwo.url,
+            videoTwo.headers,
         )
 //        lifecycleScope.launch {
 //            delay(10.seconds)
 //
 //            val videoThree = Settings.Videos[2]
 //            videoPlayerTwo.load(
+//                videoThree.url,
 //                videoThree.title,
 //                videoThree.subtitle,
-//                videoThree.url,
+//                videoThree.headers,
 //            )
 //        }
         val videoThree = Settings.Videos[2]
         videoPlayerThree.load(
+            videoThree.url,
             videoThree.title,
             videoThree.subtitle,
-            videoThree.url,
+            videoThree.headers,
         )
         videoPlayerFour.load(
             ""

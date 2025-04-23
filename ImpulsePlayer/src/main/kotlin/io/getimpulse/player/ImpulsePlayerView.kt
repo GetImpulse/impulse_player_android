@@ -171,12 +171,12 @@ class ImpulsePlayerView @JvmOverloads constructor(
 
     // External interface
 
-    fun load(url: String) {
-        load(Video(null, null, url))
+    fun setCastEnabled(enabled: Boolean) {
+        controlsView.setCastEnabled(enabled)
     }
 
-    fun load(title: String?, subtitle: String?, url: String) {
-        load(Video(title, subtitle, url))
+    fun load(url: String, title: String? = null, subtitle: String? = null, headers: Map<String, String> = mapOf()) {
+        load(Video(title, subtitle, url, headers))
     }
 
     fun play() {

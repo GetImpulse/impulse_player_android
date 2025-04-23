@@ -50,21 +50,18 @@ internal class CastButton @JvmOverloads constructor(
         getSession().getCastState().collectLatest { state ->
             when (state) {
                 CastManager.State.Initializing -> {
-                    setGone()
+                    // Ignore
                 }
 
                 CastManager.State.Loading -> {
-                    setVisible()
                     showCastLoading()
                 }
 
                 CastManager.State.Inactive -> {
-                    setVisible()
                     setImageResource(R.drawable.ic_cast)
                 }
 
                 CastManager.State.Active -> {
-                    setVisible()
                     setImageResource(R.drawable.ic_cast_connected)
                 }
             }

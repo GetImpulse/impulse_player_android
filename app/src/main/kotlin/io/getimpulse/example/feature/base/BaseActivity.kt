@@ -1,4 +1,4 @@
-package io.getimpulse.example
+package io.getimpulse.example.feature.base
 
 import android.os.Bundle
 import androidx.annotation.LayoutRes
