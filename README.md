@@ -56,10 +56,16 @@ val impulsePlayer = findViewById<ImpulsePlayerView>(R.id.impulse_player)
 The main commands to use the player:
 
 ```kotlin
+val headers = mapOf(
+    "key" to "value",
+)
+
+impulsePlayer.load("url")
 impulsePlayer.load(
+    "url",
     "Title",
     "Subtitle",
-    "url",
+    headers,
 )
 impulsePlayer.play()
 impulsePlayer.pause()
@@ -141,7 +147,7 @@ ImpulsePlayer.setSettings(
 )
 ```
 
-> **Note**: Note: Cast is unsupported when a player loads a video using additional authorization headers. To disable Cast for that specific player while preserving Cast functionality for others, use `impulsePlayer.setCastEnabled(false)`
+> **Note**: Note: Cast is unsupported when a player loads a video using additional authorization headers. To disable Cast for that specific player while preserving Cast functionality for others, use `impulsePlayer.setCastEnabled(false)`.
 
 ### Customization
 
