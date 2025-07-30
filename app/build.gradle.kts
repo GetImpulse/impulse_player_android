@@ -12,7 +12,7 @@ android {
         minSdk = 26
         targetSdk = 35
         versionCode = 1
-        versionName = "0.3.0"
+        versionName = "0.3.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,7 +44,7 @@ android {
 
 dependencies {
     implementation(project(":ImpulsePlayer")) // Local
-//    implementation("com.github.GetImpulse:impulse_player_android:0.3.0") // Remote
+//    implementation("com.github.GetImpulse:impulse_player_android:0.3.1") // Remote
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

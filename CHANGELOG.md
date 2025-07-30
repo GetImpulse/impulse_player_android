@@ -1,3 +1,7 @@
+### 0.3.1
+
+* [Session] Added support for keeping the session alive for longer than the view lifecycle.
+
 ### 0.3.0
 
 * [Video Player] Added support for headers on video load.

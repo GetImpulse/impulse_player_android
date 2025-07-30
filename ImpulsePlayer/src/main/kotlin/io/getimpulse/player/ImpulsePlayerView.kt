@@ -231,6 +231,16 @@ class ImpulsePlayerView @JvmOverloads constructor(
 //        SessionManager.detach(videoKey)
     }
 
+    internal fun externalKeepAlive() {
+        SessionManager.attach(context, videoKey)
+        SessionManager.show(videoKey, context)
+    }
+
+    internal fun externalDispose() {
+        SessionManager.hide(videoKey, context)
+        SessionManager.detach(videoKey)
+    }
+
     // Inner classes
     internal inner class FullScreenListener : FullscreenManager.Listener {
         fun enter() {

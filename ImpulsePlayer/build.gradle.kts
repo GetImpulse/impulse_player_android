@@ -50,7 +50,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.getimpulse"
             artifactId = "impulse_player_android"
-            version = "0.2.1"
+            version = "0.3.1"
 
             afterEvaluate {
                 from(components["release"])

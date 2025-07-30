@@ -18,4 +18,12 @@ object ImpulsePlayerFlutter {
     fun externalDetach(view: ImpulsePlayerView) {
         view.externalDetach()
     }
+
+    fun externalKeepAlive(view: ImpulsePlayerView) {
+        view.externalKeepAlive()
+    }
+
+    fun externalDispose(view: ImpulsePlayerView) {
+        view.externalDispose()
+    }
 }

@@ -4,9 +4,9 @@ import android.graphics.Typeface
 import android.graphics.fonts.FontVariationAxis
 import android.util.Log
 import androidx.core.content.res.ResourcesCompat
-import io.getimpulse.example.feature.base.BaseActivity
 import io.getimpulse.example.R
 import io.getimpulse.example.feature.Settings
+import io.getimpulse.example.feature.base.BaseActivity
 import io.getimpulse.player.ImpulsePlayer
 import io.getimpulse.player.ImpulsePlayerView
 import io.getimpulse.player.model.ImpulsePlayerAppearance
