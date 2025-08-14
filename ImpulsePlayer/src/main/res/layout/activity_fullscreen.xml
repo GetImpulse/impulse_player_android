@@ -13,6 +13,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:player_layout_id="@layout/impulse_exo_player_view"
         app:use_controller="false" />
 
     <io.getimpulse.player.component.overlay.CastingOverlay
@@ -33,5 +34,5 @@
     <io.getimpulse.player.component.overlay.LoadingOverlay
         android:id="@+id/loading_overlay"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

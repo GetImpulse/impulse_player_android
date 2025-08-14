@@ -1,3 +1,7 @@
+### 0.3.2
+
+* [Source] Prevent interfering (and crashing) the Impulse Player when both ExoPlayer version 2 and 3 are available in the project.
+
 ### 0.3.1
 
 * [Session] Added support for keeping the session alive for longer than the view lifecycle.

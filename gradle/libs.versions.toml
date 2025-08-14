@@ -9,7 +9,7 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
-media3Exoplayer = "1.4.1"
+media3Exoplayer = "1.4.1" # Note: When updating ExoPlayer, also verify `impulse_exo_player_view.xml` is the same as https://github.com/androidx/media/blob/release/libraries/ui/src/main/res/layout/exo_player_view.xml
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

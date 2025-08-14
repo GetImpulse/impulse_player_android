@@ -31,7 +31,7 @@ allprojects {
 In `app/build.gradle`:
 
 ```kotlin
-implementation("com.github.GetImpulse:impulse_player_android:0.3.1")
+implementation("com.github.GetImpulse:impulse_player_android:0.3.2")
 ```
 
 ## Usage

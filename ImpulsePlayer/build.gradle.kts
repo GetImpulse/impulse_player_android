@@ -32,6 +32,7 @@ android {
         }
     }
     publishing {
+//        resourcePrefix("impulse_")
         singleVariant("release") {
             withSourcesJar()
         }
@@ -50,7 +51,7 @@ publishing {
         create<MavenPublication>("release") {
             groupId = "com.github.getimpulse"
             artifactId = "impulse_player_android"
-            version = "0.3.1"
+            version = "0.3.2"
 
             afterEvaluate {
                 from(components["release"])

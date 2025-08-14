@@ -62,7 +62,7 @@ class VideosActivity : BaseActivity(R.layout.activity_videos) {
 //        getters()
 //        setters()
         listeners()
-        customization()
+//        customization()
     }
 
     private fun commands() {
