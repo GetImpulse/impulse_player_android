@@ -488,10 +488,15 @@ internal class Session(
                 // Combined properties
                 scope.launch {
                     combine(playerState, castState) { player, cast ->
-                        val onlyForPlayer = if (cast is CastManager.State.Inactive) {
-                            player is PlayerState.Ready
-                        } else {
-                            false
+                        val onlyForPlayer = when (cast) {
+                            is CastManager.State.Initializing,
+                            is CastManager.State.Inactive -> {
+                                player is PlayerState.Ready
+                            }
+
+                            else -> {
+                                false
+                            }
                         }
                         pictureInPictureAvailable.value = onlyForPlayer
                         selectSpeedAvailable.value = onlyForPlayer

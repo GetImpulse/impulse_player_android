@@ -1,3 +1,7 @@
+### 0.3.3
+
+* [Controls] Fix quality/speed buttons being hidden while casting is disabled.
+
 ### 0.3.2
 
 * [Source] Prevent interfering (and crashing) the Impulse Player when both ExoPlayer version 2 and 3 are available in the project.
